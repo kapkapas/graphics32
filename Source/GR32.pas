@@ -503,10 +503,10 @@ function FloatRect(const ARect: TRect): TFloatRect; overload; {$IFDEF USEINLININ
 function FloatRect(const FXR: TFixedRect): TFloatRect; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
 
 // Some basic operations over rectangles
-function IntersectRect(out Dst: TRect; const R1, R2: TRect): Boolean; overload;
-function IntersectRect(out Dst: TFloatRect; const FR1, FR2: TFloatRect): Boolean; overload;
-function UnionRect(out Rect: TRect; const R1, R2: TRect): Boolean; overload;
-function UnionRect(out Rect: TFloatRect; const R1, R2: TFloatRect): Boolean; overload;
+function IntersectRect(var Dst: TRect; const R1, R2: TRect): Boolean; overload;
+function IntersectRect(var Dst: TFloatRect; const FR1, FR2: TFloatRect): Boolean; overload;
+function UnionRect(var Rect: TRect; const R1, R2: TRect): Boolean; overload;
+function UnionRect(var Rect: TFloatRect; const R1, R2: TFloatRect): Boolean; overload;
 function EqualRect(const R1, R2: TRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
 function EqualRect(const R1, R2: TFloatRect): Boolean; overload; {$IFDEF USEINLINING} inline; {$ENDIF}
 procedure InflateRect(var R: TRect; Dx, Dy: Integer); overload; {$IFDEF USEINLINING} inline; {$ENDIF}
@@ -1940,7 +1940,7 @@ begin
   end;
 end;
 
-function IntersectRect(out Dst: TRect; const R1, R2: TRect): Boolean;
+function IntersectRect(var Dst: TRect; const R1, R2: TRect): Boolean;
 begin
   if R1.Left >= R2.Left then Dst.Left := R1.Left else Dst.Left := R2.Left;
   if R1.Right <= R2.Right then Dst.Right := R1.Right else Dst.Right := R2.Right;
@@ -1950,7 +1950,7 @@ begin
   if not Result then Dst := ZERO_RECT;
 end;
 
-function IntersectRect(out Dst: TFloatRect; const FR1, FR2: TFloatRect): Boolean;
+function IntersectRect(var Dst: TFloatRect; const FR1, FR2: TFloatRect): Boolean;
 begin
   Dst.Left   := Math.Max(FR1.Left,   FR2.Left);
   Dst.Right  := Math.Min(FR1.Right,  FR2.Right);
@@ -1960,7 +1960,7 @@ begin
   if not Result then FillLongword(Dst, 4, 0);
 end;
 
-function UnionRect(out Rect: TRect; const R1, R2: TRect): Boolean;
+function UnionRect(var Rect: TRect; const R1, R2: TRect): Boolean;
 begin
   Rect := R1;
   if not IsRectEmpty(R2) then
@@ -1974,7 +1974,7 @@ begin
   if not Result then Rect := ZERO_RECT;
 end;
 
-function UnionRect(out Rect: TFloatRect; const R1, R2: TFloatRect): Boolean;
+function UnionRect(var Rect: TFloatRect; const R1, R2: TFloatRect): Boolean;
 begin
   Rect := R1;
   if not IsRectEmpty(R2) then
